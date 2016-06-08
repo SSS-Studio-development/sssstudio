@@ -1,28 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
-
 from flask import Flask, request, render_template, make_response, session, jsonify, g, url_for, send_from_directory, \
     redirect
 from flask_wtf import Form
 from wtforms import StringField, SubmitField, validators, ValidationError
-from wtforms.validators import Required, URL
-
-# from bson import Code
-# from urllib import unquote_plus, quote_plus
-# from flask_cors import cross_origin
-# from urlnorm import urlnorm
-# import lxml.html
-# import pymongo
-import urllib2
-# import StringIO
-
+from wtforms.validators import Required,URL
 import conf
-
-# import sweetmaker
-# import oursql
-# import json
-# import requests
-
 
 app = Flask(__name__)
 
@@ -63,12 +46,8 @@ def run_selenium(passed_url):
     print ("till here done")
     head_element = WebDriverWait(driver, 30).until(lambda driver: driver.find_element_by_tag_name('head')) # waiting for page to atleast load <head> element fully so script could be injected
     print ("done till here")
-
-    #if <head> element has completely loaded, script will be injected
     if head_element:
         print ("injecting script")
-       #driver.execute_script("if(!($=window.jQuery)){script=document.createElement('script');script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js';document.getElementsByTagName('head')[0].appendChild(script);")
-        #driver.execute_script("script=document.createElement('script');script.src='//ba8fbd5823dec19f2a925b874342f02f325c5581.googledrive.com/host/0B0c01D4InsAOflQ0TUhidTJPUTNycmpyR0IwQ2R1RzBnSVE0SVNzLUxPeHcxOEZVM2RISzg/newfinal/annolet_main.js?v='+parseInt(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(script);")
         driver.execute_script("javascript:(function(){if(!($=window.jQuery)){script=document.createElement('script');script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js';script.onload=initAnnoLet;document.getElementsByTagName('head')[0].appendChild(script);}else{initAnnoLet();}function initAnnoLet(){script=document.createElement('script');script.src='//ba8fbd5823dec19f2a925b874342f02f325c5581.googledrive.com/host/0B0c01D4InsAOflQ0TUhidTJPUTNycmpyR0IwQ2R1RzBnSVE0SVNzLUxPeHcxOEZVM2RISzg/newfinal/annolet_main.js?v='+parseInt(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(script);}})()")
         print ("injected")
     return 'annotate'
