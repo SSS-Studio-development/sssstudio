@@ -37,21 +37,6 @@ Their is still a dilemma about which database system to use NoSQL or SQL or mix 
      ++ users(_id_ ,name, email, password hash)
      ++ renarrations(_id_, author, target_URL, tag_name, xpath, renarration)
 
-   *users*               *renarrations*
-+-----------+           +----- ----------+
-|  _id_     |---------->| author_id      |
-+-----------+           +--- ------------+
-|  name     |           | _tagset_id_    |
-+-----------+           +----------------+
-|  email    |           | target_URL     |
-+-----------+           +----------------+
-|  password |           | xpath          |
-+-----------+           +----------------+
-                        | tag_name       |
-                        +----------------+
-                        | renarration    |
-                        +----------------+
-
 ** option 3
  + using MongoDB for everything
  + two collections
