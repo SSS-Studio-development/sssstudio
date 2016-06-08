@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Renarration Studio - {{ title }}</title>
+    <!-- Latest compiled and minified CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+    crossorigin="anonymous"> {% block head %} {% endblock %}
+    <style>
+        #header {
+            background-color: #ffffff;
+        }
+        #row-1 {
+            padding-top: 5px;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div id="header">
+            <div class="row" id="row-1">
+                <div class="col-md-11" id="row-1-col-1">
+                    <h4>SSS Studio</h4>
+                </div>
+            </div>
+        </div>
+        {% block body %}{% endblock %}
+    </div>
+    {% block script %} {% endblock %}
+</body>
+
+</html>

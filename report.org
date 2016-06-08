@@ -1,0 +1,149 @@
+#+AUTHOR: RAGHAV MITTAL
+#+TITLE: RENARRATION STUDIO REPORT
+#+EMAIL: raghav.mittal@st.niituniversity.in
+
+* Concept
+Style Sheets essentially provide alternate views to one singular content. In our case we wish to provide 
+alternate narratives to one singular narrative. The alternative narratives may be more meaningful to end 
+users. This idea of a more meaningful narrative is what we are calling semantic. So, a semantic style 
+sheet is a renarrating a existing page into something that has more meaning to an enduser.
+
+* Requirements
+The project is divided into number of releases based on requirements
+** Release 0
++ Fetch website from url
++ User should be able to tag elements
++ conversion phonetic representation
+
+** Release 1
++ Userbase with login-logout and database
++ database for tags.
+
+** Release 2
++ CRUD operations
+
+* Data model
+Their is still a dilemma about which database system to use NoSQL or SQL or mix of both.
+** option 1
+  + using MySQL for user management. 
+    ++ table for storing user details
+  + MongoDB for managing tags and renarrations.
+    ++ managing url and tag maps.
+    ++ each url may have variable number of tags and tagged element may have narration 
+    ++ schema free design in  MongoDB will make it easy.
+** option 2
+   + using MySQL for everything
+   + two tables
+     ++ users(_id_ ,name, email, password hash)
+     ++ renarrations(_id_, author, target_URL, tag_name, xpath, renarration)
+
+   *users*               *renarrations*
++-----------+           +----- ----------+
+|  _id_     |---------->| author_id      |
++-----------+           +--- ------------+
+|  name     |           | _tagset_id_    |
++-----------+           +----------------+
+|  email    |           | target_URL     |
++-----------+           +----------------+
+|  password |           | xpath          |
++-----------+           +----------------+
+                        | tag_name       |
+                        +----------------+
+                        | renarration    |
+                        +----------------+
+
+** option 3
+ + using MongoDB for everything
+ + two collections
+   ++ users ( _id_ , name , email, password hash)
+   ++ renarrations(author, data[] -> {tagset_id, url, tagset[]->{tagname, xpath, renarration} } )
+
+*users* collection
+{
+  id:
+  name:
+  email:
+  pass:
+}
+
+
+*renarrations* collection
+{
+ author_id:
+ data: [
+         {
+          tagset_id:
+	  url:
+	  tagset:[
+                    {
+		     tag_name:
+		     xpath:
+		     renarration:
+		    },
+		    {
+		     tag_name:
+		     xpath:
+		     renarration:
+		    }
+	         ]
+           }
+        ]
+}
+
+
++--------------------+
+| *users*            |
+|   id               |
+|   name             |
+|   email            |
+|   password         |
+|                    |
++--------------------+
+
++----------------------+
+| *renarration*        |  
+|  author_id           |
+|  data[]              |
+|                      |
+| +------------------+ |
+| | *data*           | |
+| | tagset_id        | |
+| | url              | |
+| | tagset[]         | |
+| | +--------------+ | |
+| | | *tagset*     | | |
+| | |  tagname     | | |
+| | |  xpath       | | |
+| | |  renarration | | |
+| | +--------------+ | |
+| +------------------+ |
++----------------------+ 
+
+* Design
++ The design is influenced by earlier similar projects like Alipi(webapp), Annolet(bookmarklet)
+** Option 1 -> Bookmarklet
+*** advantages
++++ easy to maintain and scale.
++++ compatible with most of the browsers and works with both Static and Dynamic webpages
+
+*** disadvantages
++++ less attractive and interactive
++++ problems with testing
++++ bad user engagement and user experience
++++ best works with PC and laptop browsers only.
+
+** Option 2 -> Portal
+*** advantages
++++ nice user experience
++++ high scalability
++++ better user engagement
++++ multiple device compatible
+
+*** disadvantages
++++ difficult to maintain
++++ issues with compatibility, not able to figure out ways for fetching secured pages
++++ not able to figure out ways to fetch dynamic webpages
+
+*** 
+    [fn::go through alipi tool and W3C web annotation protocal 2016]
+** Option 3 -> Mix of both
