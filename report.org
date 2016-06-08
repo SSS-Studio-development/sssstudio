@@ -147,3 +147,19 @@ Their is still a dilemma about which database system to use NoSQL or SQL or mix 
 *** 
     [fn::go through alipi tool and W3C web annotation protocal 2016]
 ** Option 3 -> Mix of both
+#+begin_src ditaa :file ditaa-simpleboxes.png :tangle yes
++-----------+         +-------------------+           +-----------+
+|Our Webpage|- ------>|Target Webpage     | --------> |Back to our|
+|           |         |with AnnoLet!      |           | page      |
++-----------+         +-------------------+           +-----------+
+
++-------------------+            +----------------------+
+|AnnoLet! Functions | <--------> |Communic. with Server |
++-------------------+    API     +----------------------+
+                          |
+                          |
+                     +----------------------+
+                     |+ User Authentication | 
+                     |+ CRUD operations     |
+                     +----------------------+                      
+#+end_src
