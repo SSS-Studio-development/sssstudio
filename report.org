@@ -143,8 +143,9 @@ Their is still a dilemma about which database system to use NoSQL or SQL or mix 
 +-------------------+    API     +----------------------+
                           |
                           |
-                     +----------------------+
-                     |+ User Authentication | 
-                     |+ CRUD operations     |
-                     +----------------------+                      
+                     +-----------------------+
+                     |+ User Authentication  | 
+                     |+ CRUD operations      |
+                     |+ Phonetic translations|
+                     +-----------------------+                      
 #+end_src
