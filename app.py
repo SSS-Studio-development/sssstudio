@@ -48,7 +48,7 @@ def run_selenium(passed_url):
     print ("done till here")
     if head_element:
         print ("injecting script")
-        driver.execute_script("javascript:(function(){if(!($=window.jQuery)){script=document.createElement('script');script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js';script.onload=initAnnoLet;document.getElementsByTagName('head')[0].appendChild(script);}else{initAnnoLet();}function initAnnoLet(){script=document.createElement('script');script.src='//ba8fbd5823dec19f2a925b874342f02f325c5581.googledrive.com/host/0B0c01D4InsAOflQ0TUhidTJPUTNycmpyR0IwQ2R1RzBnSVE0SVNzLUxPeHcxOEZVM2RISzg/newfinal/annolet_main.js?v='+parseInt(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(script);}})()")
+        driver.execute_script("!function(){function e(){script=document.createElement('script'),script.src='//raw.githubusercontent.com/SSS-Studio-development/annoletjs/master/annolet_main.js?v='+parseInt(1e3*Math.random()),document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
         print ("injected")
     return 'annotate'
 @app.route('/annotate')
