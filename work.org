@@ -1,0 +1,83 @@
+#+title: Implementation of SSS Studio
+#+author: Raghav Mittal
+#+email: raghav.mittal@st.niituniversity.in
+
+This report contains the codeblocks to implement renarration studio portal in Python.
+
+** Requirements
+*** R v0
+The following are the requirements from user side
++ open target website
++ select DOM objects or HTML elements
++ tag them according to RDFa standards
+
+
+** Use of annolet
+To achieve this functionality we can use AnnoLet! which is already able to select and highlight DOM elements. I also went through [Alipi][fn: remember here Alipi means Alipi Renarration Tool and not the portal] but it has no documentation and code is very very long and confusing. AnnoLet has well documented and well structured and small JavaScript code.
+
+**** But Alipi has more features than Annolet
+Surely Alipi has much more features than annolet but all of that is very badly wrapped in. I will use Alipi repository as a resource rather than using it as a source. We can check the code out for understanding implementation of different features.
+
+**** Features which are present in Alipi and not in Annolet as per requirements in R v0
++ detection of DOM element type if it is text or image or blank space.
++ renarrate selecetd element and tag it according to ontologies.
+
+  
+** SSS Studio
+   There two main components in SSS Studio
+*** Portal
+Portal like Alipi from where a user can navigate to URL he/she wants to annotate.
+It will also act as a backend for managing data coming from Tagging Tool
+**** Requirement
+Requirement divided into releases
+***** R0
++ Portal where user can insert URL and navigate to it
++ Tagging tool should be loaded on given URL
+
+***** R1
++ Information about the project
++ User should be able to register and login
++ all the work should be stored either in form of Sweets or directly into Database
++ Should be able to retrieve it
+
+***** R3
++ User should be able to view all his work history in portal
++ User can make his/her profile on portal
+
+**** Implementation with Python-Flask
+***** R0
+****** Use of Selenium Web driver
+Selenium web driver are used to automate web processes. This tool is often used for testing website. Here I am using its Python library for automating the process of loading Annolet into target URL given by user.
+
+*** Renarration or Tagging tool
+Tool like Alipi renarration tool or Annolet modified to work as Tagging tool
+**** Requirement
+Requirement divided into releases.
+***** R0
++ Select DOM element
++ Tagging them as per RDFa standards
+
+***** R1
++ Do same work as R v0 but under a logged in session
++ User should be able to save work
++ Undo Operations
+
+***** R2
++ User should be able to do CRUD operations on saved work.
+
+**** Implementation
+AnnoLet! tool which I created last year summers (2015) will be extended to work as a Tagging tool. Also AnnoLet project was started with idea of renarration and tagging. Last year it was only able to highlight DOM elements.
+***** Pros and Cons of AnnoLet! over Alipi renarration tool
+****** Pros
++ Annolet has well documented, well structured code.
++ Purely written in javascript and could be used as Bookmarklet also.
++ Easy to understand code.
++ Better UI
+
+****** Cons
++ Sometimes loads incompletely
++ Needs lot of developments. Alipi has many features already which we require.
+
+ 
+* Footnotes
+[fn:1] Any website which user wants to annotate or renarrate.

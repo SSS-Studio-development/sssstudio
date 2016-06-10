@@ -13,7 +13,7 @@ app.config['SECRET_KEY'] = conf.SECRET_KEY[0]
 
 # FORM for url
 class url_form(Form):
-    url = StringField('enter URL', validators=[Required(message="required"),URL(message="invalid input")])
+    url = StringField('enter URL', validators=[Required(message="required"),URL(message="invalid input"),])
     submit = SubmitField("TagIt")
 
 
@@ -21,6 +21,7 @@ class url_form(Form):
 
 # first page that will ask user to enter the URL
 def index():
+
     form = url_form()
     if request.method == 'POST':
         if form.validate() == False:
@@ -40,8 +41,24 @@ def index():
 # selenium webdriver in use
 
 def run_selenium(passed_url):
+    browser = request.user_agent.browser
+    version = request.user_agent.version and int(request.user_agent.version.split('.')[0])
+    platform = request.user_agent.platform
+    uas = request.user_agent.string
+
+    if 'OPR' in uas:
+        browser = 'Opera'
+        driver = webdriver.Opera()
+    elif browser == 'chrome':
+        browser = 'Chrome'
+    elif browser == 'firefox':
+        browser == 'Firefox'
+        driver = webdriver.Firefox()  # for now works with firefox only
+
+    print browser
+
     print (passed_url)
-    driver = webdriver.Firefox() # for now works with firefox only
+
     driver.get(passed_url) #passing url taken from form
     print ("till here done")
     head_element = WebDriverWait(driver, 30).until(lambda driver: driver.find_element_by_tag_name('head')) # waiting for page to atleast load <head> element fully so script could be injected

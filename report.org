@@ -9,7 +9,7 @@ users. This idea of a more meaningful narrative is what we are calling semantic.
 sheet is a renarrating a existing page into something that has more meaning to an enduser.
 
 * Requirements
-The project is divided into number of releases based on requirements
+ The project is divided into number of releases based on requirements
 ** Release 0
 + Fetch website from url
 + User should be able to tag elements
@@ -129,14 +129,14 @@ Their is still a dilemma about which database system to use NoSQL or SQL or mix 
 +++ issues with compatibility, not able to figure out ways for fetching secured pages
 +++ not able to figure out ways to fetch dynamic webpages
 
-*** 
-    [fn::go through alipi tool and W3C web annotation protocal 2016]
 ** Option 3 -> Mix of both
-#+begin_src ditaa :file ditaa-simpleboxes.png :tangle yes
-+-----------+         +-------------------+           +-----------+
-|Our Webpage|- ------>|Target Webpage     | --------> |Back to our|
-|           |         |with AnnoLet!      |           | page      |
-+-----------+         +-------------------+           +-----------+
+#+begin_src ditaa :file ditaa-simpleboxes.png
+
+Annolet can be loaded in two ways -> in form of bookmarklet or through portal.
++-----------+         +-------------------+
+|Portal     |- ------>|Target Webpage     |
+|           |         |with AnnoLet!      |
++-----------+         +-------------------+
 
 +-------------------+            +----------------------+
 |AnnoLet! Functions | <--------> |Communic. with Server |
@@ -149,3 +149,4 @@ Their is still a dilemma about which database system to use NoSQL or SQL or mix 
                      |+ Phonetic translations|
                      +-----------------------+                      
 #+end_src
+
