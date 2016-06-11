@@ -67,7 +67,7 @@ def run_selenium(passed_url):
         print ("injecting script")
 
         # rawgit.com MaxCDN service used.. js file is at github repo annoletjs/master
-        driver.execute_script("!function(){function e(){script=document.createElement('script'),script.src='//raw.githubusercontent.com/SSS-Studio-development/annoletjs/master/annolet_main.js?v='+parseInt(1e3*Math.random()),document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
+        driver.execute_script("!function(){function e(){script=document.createElement('script'),script.src='//raw.githubusercontent.com/SSS-Studio-development/annoletjs/patch/annolet_main.js?v='+parseInt(1e3*Math.random()),document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
         print ("injected")
     return 'annotate'
 @app.route('/annotate')
