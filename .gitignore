@@ -5,8 +5,4 @@ venv/
 *.org~
 conf.py
 dump_app.py
-<<<<<<< HEAD
-
-=======
-web/flask
->>>>>>> 23b93f7307516dbe7fd37d292d24a9da0ed67631
+flask

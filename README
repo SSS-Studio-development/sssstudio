@@ -1,0 +1,11 @@
+This repository contains SSS studio which can be used to highlight and modify a webpage as per your convineance
+
+Setting up enviornment :
+
+To set virtual enviornment run the setup.sh file and activate the virtual enviornment by
+
+source flask/bin/activate
+
+run app.py to start the server .
+
+default url is 127.0.0.1:5000
