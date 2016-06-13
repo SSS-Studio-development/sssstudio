@@ -5,9 +5,12 @@ from flask import Flask, request, render_template, make_response, session, jsoni
 from flask_wtf import Form
 from wtforms import StringField, SubmitField, validators, ValidationError
 from wtforms.validators import Required,URL
+from flask_cors import CORS
 import conf
 
 app = Flask(__name__)
+CORS(app)
+
 
 app.config['SECRET_KEY'] = conf.SECRET_KEY[0]
 
@@ -73,6 +76,7 @@ def run_selenium(passed_url):
 @app.route('/annotate')
 def enjoy():
     return render_template('after_load.html', title='enjoy')
+
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port="5000")
