@@ -73,7 +73,11 @@ def run_selenium(passed_url):
         print ("injecting script")
 
         # rawgit.com MaxCDN service used.. js file is at github repo annoletjs/master
+<<<<<<< HEAD
         driver.execute_script("!function(){function e(){script=document.createElement('script'),script.type='text/javascript',script.src='//raw.githubusercontent.com/SSS-Studio-development/annoletjs/patch/annolet_main.js',document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
+=======
+        driver.execute_script("!function(){function e(){script=document.createElement('script'),script.type='text/javascript',script.src='//rawgit.com/SSS-Studio-development/annoletjs/tagger/annolet_main.js',document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
+>>>>>>> 49f2a589805b9955bd5b9afb7be187a5a328e66d
         print ("injected")
     return 'annotate'
 @app.route('/annotate')
