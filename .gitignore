@@ -6,3 +6,6 @@ venv/
 conf.py
 dump_app.py
 flask
+src/build/t*.py
+src/build/t*.sh
+src/build/templates/t*.html
