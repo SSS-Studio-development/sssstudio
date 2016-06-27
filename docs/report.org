@@ -1,0 +1,31 @@
+#+title:  APIs for first release 
+#+AUTHOR: Raj Manvar
+#+DATE: [2016-06-09 Thu]
+
+* APIs for first release
+
+|-------------+------------+--------------------+-------------------+-----------------------|
+| API usage   | URL        | header             | payload           | result                |
+|             |            | required           | required          |                       |
+|-------------+------------+--------------------+-------------------+-----------------------|
+| Translation | /translate | 'Content-type':    | 'sentence':       | returns phonetic      |
+| of sentence |            | 'application/json' | required sentence | translation of        |
+|             |            |                    |                   | words in the sentence |
+|-------------+------------+--------------------+-------------------+-----------------------|
+|             |            |                    |                   |                       |
+
+
+** remaining cases
+
++ If any of the word in the sentence isn't found in the word_list then the same
+  word will be returned
++ The sentence is expected to have words and punctuation marks separated by
+  space, failing which translation till the required point will be made and the
+  remaining sentence will be returned as it is.
+
+
+* Testing
+
+  + For testing the APIs cURL tool has been used to send and receive the response
+  + The tests are included in the test.sh file 
+
