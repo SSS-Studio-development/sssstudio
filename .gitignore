@@ -5,11 +5,8 @@ venv/
 *.org~
 conf.py
 dump_app.py
-<<<<<<< HEAD
 
-=======
 flask
 src/build/t*.py
 src/build/t*.sh
 src/build/templates/t*.html
->>>>>>> develop
