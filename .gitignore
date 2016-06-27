@@ -4,7 +4,6 @@ venv/
 *.py~
 *.org~
 conf.py
-dump_app.py
 
 flask
 src/build/t*.py
