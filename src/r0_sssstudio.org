@@ -1,0 +1,445 @@
+#+AUTHOR:    Sai Gollapudi
+#+EMAIL:     saigollapudi1@gmail.com
+
+
+#+DESCRIPTION: starting a base code for a renarrator studio
+#+KEYWORDS: Alipi, Renarration, Sweets, annotation, markup, tagit, annolet, selinium
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+STARTUP: hidestars
+
+#+HTML_LINK_UP: index.html
+#+HTML_LINK_HOME:   index.html
+
+#+INFOJS_OPT: view:info toc:t ltoc:t tdepth:1 mouse:underline buttons:0 path:style/js/org-info.js
+#+HTML_HEAD:  <link rel="stylesheet" type="text/css" href="style/css/worg-style.css" />
+#+HTML_HEAD_EXTRA:  <link rel="stylesheet" type="text/css" href="style/css/override.css" />
+#+HTML_HEAD_EXTRA:  <link rel="icon" type="image/png" href="style/img/favicon/popl.png" />
+
+
+* r0 requirements
+Here is basically what is expected out of the studio application for r0. 
++ develop a backend web app (portal) that is able to display a given page (indicated by user input URL)
++ have a UI that is able to take in the URL and display requested / fetched page
+
+
+* Design
+Initially we looked at reusing Alipi code. See [[Alipi]] section in references for more details. Code is slightly dated, weak in documentation and has multiple fixes. It uses Python, Flask and Virtual Environment. However, JavaScript libraries for Annotations have recently emerged. We can leverage it. Also, we found a reuse opportunity in working with [[http://docs.seleniumhq.org/][Selinium]] (which is a testing oriented FOSS application). Keeping this new opportunity in mind, we decided to pursue more JavaScript oriented and Selinium WebDriver based code. This makes our design somewhat simpler than Alipi. Other thought which drove us to adopt a new solution (other than current Alipi) was the software Engineering approach we were planning to use for our work. In our work, we wanted to use Literate Programming practices and also some best practices being used by the [[https://www.linkedin.com/company/vlead][VLEAD]] team (working on [[http://vlab.co.in/][Virtual Labs]]) at [[https://www.iiit.ac.in/][IIIT-H]]. Finally we wanted to also create a platform (and applications) related to Semantic Style Sheeting and Renarrations that are more tightly linked to [[https://rdfa.info/][RDFa]] and other semantic [[http://schema.org/][schemas]]. This addition would perhaps ditract from the original intent of Alipi - thus, again, our decision to start our own effort.
+
+HLD document for SSSStudio (also called the SSS Renarrator Studio) gives the following use case diagram.
+
+[[file:.diagrams/browse_annotated_page.jpg]]
+
+
+ 
+* Implementation
+
+** setup
+In order for the source code to execute properly, we need to have the right environment. This includes having Python, having Flask, having Virtual Environment etc. We also would need Selinium for this.
+
+Here is the code for doing all that
+#+NAME: setup_file
+#+BEGIN_SRC sh :noweb yes :export code :tangle "build/tsetup.sh"
+#! bash script for setting up enviornment for flask app
+
+sudo apt-get install python-virtualenv
+
+virtualenv flask
+
+flask/bin/pip install flask
+
+flask/bin/pip install flask-wtf
+
+flask/bin/pip install selenium
+
+flask/bin/pip install conf
+
+flask/bin/pip install -U flask-cors
+#+END_SRC
+
+** configuration
+There are few steps that need to be done as part of configuration
++ we need to have right packages installed. 
++ we need to setup the right configuration parameters
++
+
+*** installing correct packages
+For the backend we are using Python Flask based Virtual Environment. 
+Package installer in Python (virtual environments) is called PIP. This installer should fetch all the required packages in our virtual environment which is about to run this application.
+
+The list of required packages includes:
++ assert-exists==0.0.5
++ beautifulsoup4==4.4.1
++ bs4==0.0.1
++ caller-module==0.0.9
++ click==6.6
++ conf==0.0.5
++ cssselect==0.9.1
++ EasyProcess==0.2.2
++ Flask==0.11.1
++ Flask-Cors==2.1.2
++ Flask-WTF==0.12
++ fullpath==0.0.6
++ getclass==0.0.9
++ isclassmethod==0.0.5
++ isstaticmethod==0.0.6
++ isstring==0.0.6
++ itsdangerous==0.24
++ Jinja2==2.8
++ linecache2==1.0.0
++ lxml==3.6.0
++ MarkupSafe==0.23
++ objectname==0.0.5
++ public==0.0.0
++ pyquery==1.2.13
++ PyVirtualDisplay==0.2
++ selenium==2.53.5
++ six==1.10.0
++ tolist==0.0.8
++ traceback2==1.4.0
++ unittest2==1.1.0
++ Werkzeug==0.11.10
++ WTForms==2.1 
+
+Here is the code for doing that
+#+NAME: setupPIP_file
+#+BEGIN_SRC python :noweb yes :export code :tangle "build/tsetupPIP.py"
+# this will install all the needed Python packages within the flask virtual environment of Python
+
+# this is a template file... more appropriate code changes are expected. Currently we are using many packages... some are important some may can be eliminated. we are waiting till all this is cleared up, to really populate this code.
+
+import os
+from setuptools import setup, find_packages
+
+here = os.path.abspath(os.path.dirname(__file__))
+#README = open(os.path.join(here, 'README.rst')).read()
+#CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
+
+requires = [
+    'Flask',
+    'requests',
+    'lxml'
+]
+
+setup(name='SSSStudio',
+      version='0.1',
+      description='SSSStudio for Renarrator',
+      license='BSD',
+      classifiers=[
+          "Development Status :: 1 - pre-alpha",
+          "Intended Audience :: Developers",
+          "Environment :: Web Environment",
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: OS Independent",
+          "Programming Language :: JavaScript",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.7",
+          "Topic :: Internet",
+          "Topic :: Internet :: WWW/HTTP :: Semantic Web :: Social Web ::\
+          Accessibilty",
+      ],
+      author='Sai Gollapudi',
+      author_email='saigollapudi1@gmail.com',
+      url='https://git.pantoto.org/sweet-web/swtr',
+      keywords='',
+      packages=find_packages(),
+      include_package_data=True,
+      zip_safe=False,
+      install_requires=requires,
+     )
+#+END_SRC 
+
+*** Configuration files
+We have created a file named sample_conf.py. This file contains a template that can be used to create a user's own copy of conf.py file. This conf.py file should have a user input secret string. This will be used for application's security purposes. 
+
+Here is the code for sample_conf.py
+#+NAME: sample_conf
+#+BEGIN_SRC python :noweb yes :export code :tangle "build/tsample_conf.py"
+SECRET_KEY = ('<input some complicated string here>') 
+#+END_SRC 
+
+** server side functionality
+As per our design we will have a Python based server on the back side. This will run on (either a localhost or 127.0.0.1:8000 or) on a hosted location. We expect to have IIIT-Hyd/VLEAD host this server.
+ 
+*** Server application code
+Application code for the Server side is being run out of app.py. The
+declaration for our application is presented here. Notice that we are
+loading Flask, Selinium... related modules, and also the JSON file.
+#+NAME: app_decl
+#+BEGIN_SRC python :noweb yes :export code
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from flask import (Flask, 
+                  request, 
+                  render_template, 
+                  make_response, 
+                  session, 
+                  jsonify, 
+                  g, 
+                  url_for, 
+                  send_from_directory, 
+                  redirect)
+from flask_wtf import Form
+from wtforms import (StringField, 
+                    SubmitField, 
+                    validators, 
+                    ValidationError)
+from wtforms.validators import Required,URL
+from flask_cors import CORS
+import conf
+
+# this is where the app is created in Flask
+app = Flask(__name__)
+CORS(app)
+
+# this secret key is grabbed from the conf.py file. It represents the secret key of the user
+app.config['SECRET_KEY'] = conf.SECRET_KEY[0]
+#+END_SRC
+
+Our server is based on the MVC architecture. To implement this, we are having seperate router codes for each URL that the server is presented with.
+
+Here is the routing code for our the primary, base, '/', index route
+#+NAME: app_indexRoute
+#+BEGIN_SRC python :noweb yes :export code
+
+# here is the form for the index form
+# FORM for url
+class url_form(Form):
+    url = StringField('enter URL', validators=[Required(message="required"),URL(message="invalid input"),])
+    submit = SubmitField("TagIt")
+
+@app.route('/', methods=['GET','POST'])
+
+# first page that will ask user to enter the URL
+def index():
+
+    form = url_form()
+    if request.method == 'POST':
+        if form.validate() == False:
+            print "enter valid url"
+            return render_template('index.html', form=form)  # if URL is invalid, it will return to index
+        elif form.validate_on_submit():
+            global url
+            url = form.url.data
+            print url
+            abc = run_selenium(url) # redirecting to selenium to inject javascript and automate further process
+            return redirect(abc)
+
+    elif request.method == 'GET':
+        return render_template('index.html', form = form, title="Home")
+
+#+END_SRC
+
+The index or base route of '/' depends on calling the selinium driver. Here is the code that allows us to invoke the selinium tool. In this tool, as Selinium code is sensitive to the specific brand of browser, we first check for the type of browser that is being used. Later we setup the driver to call the URL that the user has input in the original entry page. 
+
+The reason for using Selinium is simple. We need a mechanism to not only be able to fetch the user requested page (for annotation), but also be able to annotate it. To annotate we need Annolet code (which is JavaScript). But this JavaScript code needs to be injected into the fetched HTML file. Selinium allows us to do that injection seemlessly... that is CSS of the original is maintained. Also, the code is clean. 
+
+The actual annotation work is done elsewhere by a bookmarklet called Annolet. This code here is the server side Python code calling Selinium.
+#+NAME: app_runSeleniumDef
+#+BEGIN_SRC python :noweb yes :export code
+# selenium webdriver in use
+
+def run_selenium(passed_url):
+    browser = request.user_agent.browser
+    version = request.user_agent.version and int(request.user_agent.version.split('.')[0])
+    platform = request.user_agent.platform
+    uas = request.user_agent.string
+
+    if 'OPR' in uas:
+        browser = 'Opera'
+        driver = webdriver.Opera()
+    elif browser == 'chrome':
+        browser = 'Chrome'
+
+        #locatio of chromedriver needed for running seenium on chrome browser. chromedriver is uploaded to github repo
+        driver = webdriver.Chrome(conf.CHROME_DRIVER_PATH[0])
+    elif browser == 'firefox':
+        browser == 'Firefox'
+        driver = webdriver.Firefox()  # for now works with firefox only
+
+    print browser
+
+    print (passed_url)
+
+    driver.get(passed_url) #passing url taken from form
+    print ("till here done")
+    head_element = WebDriverWait(driver, 30).until(lambda driver: driver.find_element_by_tag_name('head')) # waiting for page to atleast load <head> element fully so script could be injected
+    print ("done till here")
+    if head_element:
+        print ("injecting script")
+
+        # rawgit.com MaxCDN service used.. js file is at github repo annoletjs/master
+        driver.execute_script("!function(){function e(){script=document.createElement('script'),script.type='text/javascript',script.src='//rawgit.com/SSS-Studio-development/annoletjs/tagger/annolet_main.js',document.getElementsByTagName('head')[0].appendChild(script)}($=window.jQuery)?e():(script=document.createElement('script'),script.src='//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',script.onload=e,document.getElementsByTagName('head')[0].appendChild(script))}();")
+        print ("injected")
+    return 'annotate'
+
+#+END_SRC
+
+Once JavaScript is injected, it is the Selinium code that is taken over. It calls the browser, passing it the modified HTML code of the fetched page. The modification is essentially the injection of Annolet JavaScript. This is done in the '/annotate' route on the server side.
+
+The selinum invokes browser to show the fetched page. Meanwhile the original server side page is vacant. So, here we display a simple 'enjoy' msg.
+
+#+NAME: app_annoletRoute
+#+BEGIN_SRC python :noweb yes :export code
+
+#fetched page is shown in another window of the browser, so show some indication in this page so that user knows some state change has happened.
+@app.route('/annotate')
+def enjoy():
+    return render_template('after_load.html', title='enjoy')
+#+END_SRC
+
+Combining all the routing functions, we forumulate the server side code. Here is that app.py functionality.
+
+Here is the overall code for the server side Python application.
+#+NAME: app_full_file
+#+BEGIN_SRC python :noweb yes :export code :tangle "build/tapp.py"
+<app_decl>
+
+<app_indexRoute>
+
+<app_runSeleniumDef>
+
+<app_annoletRoute>
+
+if __name__ == "__main__":
+	app.run(host="127.0.0.1", port="8000")
+#+END_SRC 
+
+*** Server side Views 
+The views that are displayed to the enduser are dependent on the WTF forms that we populate at the server side. Here are the forms we are working with
++ template form
++ index form
++ after_load form
+
+**** template form
+The template form is the base WTF form (given in HTML). It has a header and an expandable body. The body is re-populated by index and after_load forms at a later stage. This is just the base template holder for the remainder of the forms to populate.
+
+Currently, the Style settings are also given in this form.
+
+Template form for WTF (based on HTML) is given in this way
+#+NAME: app_full_file
+#+BEGIN_SRC html :noweb yes :export code :tangle "build/templates/ttemplate.html"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Renarration Studio - {{ title }}</title>
+    <!-- Latest compiled and minified CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+    crossorigin="anonymous"> {% block head %} {% endblock %}
+    <style>
+        #header {
+            background-color: #ffffff;
+        }
+        #row-1 {
+            padding-top: 5px;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div id="header">
+            <div class="row" id="row-1">
+                <div class="col-md-11" id="row-1-col-1">
+                    <h4>SSS Studio</h4>
+                </div>
+            </div>
+        </div>
+        {% block body %}{% endblock %}
+    </div>
+    {% block script %} {% endblock %}
+</body>
+
+</html>
+#+END_SRC
+
+**** index form
+The index form is an extension for the template form. It too is a WTF form (based on HTML). This form is displayed to user when he / she just starts the backend server. The UI for this server invites the user to enter a URL for which he / she wishes to renarrate. 
+
+The index form is given in this way
+#+NAME: index_file
+#+BEGIN_SRC html :noweb yes :export code :tangle "build/templates/tindex.html"
+% extends "template.html" %}
+{% block body %}
+<div class="row jumbotron" id="row-2">
+    <div class="col-md-8" id="row-2-col-1">
+        <h2>Renarration Studio</h2>
+        <p style="font-size:1em">Style Sheets essentially provide alternate views to one singular content.
+            In our case we wish to provide alternate narratives to one singular narrative.
+            The alternative narratives may be more meaningful to end users. This
+            idea of a more meaningful narrative is what we are calling semantic.
+            So, a semantic style sheet is a renarrating a existing page into something
+            that has more meaning to an enduser.</p>
+    </div>
+    <div class="col-md-4" id="row-2-col-2" onload="form.reset();">
+        <form class="form-horizontal" id="url_form" method="post" action="/">
+            <form class="form-horizontal" name="url_form">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        {{ form.url(class='form-control',id="url_input_box", placeholder='http://www.example.com')
+                        }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-5">
+                        {{ form.submit(class="btn btn-default" ) }}
+                        <input type="reset" class="btn btn-default" ,id="url_input_box" />
+                        <!---<button type="submit" class="btn btn-default">TagIt</button>-->
+                    </div>
+                </div>
+            </form>
+        </form>
+    </div>
+</div>
+{% endblock %}
+#+END_SRC
+
+**** after_load form
+The after_load form is a WTF (HTML base) form that is displayed on the server side after fetching and displaying the user requested url content. This form extends the base template form.
+
+After_load form is given in this way
+#+NAME: after_load_file
+#+BEGIN_SRC html :noweb yes :export code :tangle "build/templates/tafter_load.html"
+{% extends "template.html" %}
+{% block body %}
+<div class="row jumbotron" id="row-2">
+    <div class="col-md-8" id="row-2-col-1">
+        <h2>Renarration Studio</h2>
+        <p style="font-size:1em">Style Sheets essentially provide alternate views to one singular content.
+            In our case we wish to provide alternate narratives to one singular narrative.
+            The alternative narratives may be more meaningful to end users. This
+            idea of a more meaningful narrative is what we are calling semantic.
+            So, a semantic style sheet is a renarrating a existing page into something
+            that has more meaning to an enduser.</p>
+    </div>
+    <div class="col-md-4" id="row-2-col-2">
+        <h2>Enjoy! :)</h2>
+    <!--    <button href=# class="btn btn-default">Annotate another URL</button> -->
+    </div>
+</div>
+{% endblock %}
+#+END_SRC  
+
+
+* Validation
+Validation requires test cases which are requirements based. We are yet to come up with a full set of testcases for our code. For now, we are just doing visual inspection and exposing bugs through normal usage.
+
+* References
++ <<Alipi>>Alipi :: Alipi is an existing web portal application. It is available [[www.alipi.us][here]]. It has been designed by [[http://janastu.org/][Janastu]] team in Bengaluru. They also go by the name Servelots. The team is managed by Dr. TB Dinesh. Sources are available in [[https://github.com/janastu/alipi][this]] Git repository.
++  Annotations :: A layer of markup with tags and other meta data information
++  Markup :: a layer of content overlaying existing content. This new layer has metadata, typically tags that are used by other subsequent processors. 
++  Document Structure :: Our intent is to take existing document (which may have a HTML structure) and further overlay it with an additional structure. THis new structure could either follow an existing semantic schema like [[http://www.foaf-project.org/][FOAF]] or be a new user defined set. See schema.org for other choices of schemas.
++ Annolet :: Is a bookmarklet code written in JavaScript. It is intended to help in annotating the published page. It is a client side code run on the browser by the client. It aims to modify a given web page. 
++ HLD document :: The overall intent, concept, requirements and the overall system architecture is given in the HLD document. The implementation derives its requirements from this HLD document. This is on GIT repository.
+ 
